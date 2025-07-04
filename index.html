@@ -50,6 +50,20 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 0.5rem;
+      width: 100%;
+    }
+    
+    .nav-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .search-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
     }
     
     .search-box {
@@ -59,9 +73,9 @@
       border-radius: 25px;
       overflow: hidden;
       border: 1px solid #ccc;
-      order: 1;
-      width: 100%;
-      margin: 0.5rem 0;
+      flex-grow: 1;
+      margin-right: 0.5rem;
+      transition: all 0.3s ease;
     }
     
     #sb {
@@ -71,6 +85,7 @@
       font-size: 1rem;
       flex: 1;
       border-radius: 25px 0 0 25px;
+      min-width: 50px;
     }
     
     #search-btn {
@@ -82,6 +97,7 @@
       color: #fd4985;
       border-radius: 0 25px 25px 0;
       transition: background 0.3s ease;
+      flex-shrink: 0;
     }
     
     #search-icon {
@@ -109,9 +125,10 @@
     
     /* Hamburger menu styles */
     .hamburger {
-      display: none;
+      display: block;
       cursor: pointer;
       padding: 10px;
+      flex-shrink: 0;
     }
     
     .hamburger i {
@@ -233,6 +250,22 @@
       color: black;
     }
 
+    /* Small mobile devices */
+    @media (max-width: 400px) {
+      .search-box {
+        max-width: 180px;
+      }
+      
+      #sb {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      #search-btn {
+        padding: 0.6rem 0.8rem;
+      }
+    }
+
     /* Tablet styles */
     @media (min-width: 600px) {
       header {
@@ -243,10 +276,19 @@
         font-size: 2.2rem;
       }
       
-      .search-box {
-        order: 0;
+      .nav-container {
         width: auto;
-        margin: 0;
+        justify-content: flex-end;
+      }
+      
+      .search-container {
+        width: auto;
+      }
+      
+      .search-box {
+        width: 250px;
+        margin: 0 1rem 0 0;
+        flex-grow: 0;
       }
       
       .main-nav a {
@@ -287,6 +329,10 @@
         font-size: 2.5rem;
       }
       
+      .search-box {
+        width: 300px;
+      }
+      
       .hero h1 {
         font-size: 3.2rem;
       }
@@ -296,18 +342,10 @@
       }
     }
 
-    /* Mobile styles */
-    @media (max-width: 599px) {
-      .hamburger {
-        display: block; /* Show hamburger on mobile */
-      }
-      
-      .main-nav a {
-        display: none; /* Hide regular nav links on mobile */
-      }
-      
+    /* Large desktop styles */
+    @media (min-width: 1200px) {
       .search-box {
-        margin: 0.5rem 0 0;
+        width: 350px;
       }
     }
   </style>
@@ -317,17 +355,21 @@
   <header>
     <div class="logo"><h1>𝓘𝓬𝓮 𝓢𝓬𝓸𝓸𝓹</h1></div>
     <nav class="main-nav">
-        <div class="search-box">
-            <input type="text" name="search" id="sb" placeholder="looking for my favorite">
+      <div class="nav-container">
+        <div class="search-container">
+          <div class="search-box">
+            <input type="text" name="search" id="sb" placeholder="Search flavors...">
             <button type="button" id="search-btn"><img src="/images/search.ico" alt="search icon" id="search-icon"></button>
+          </div>
         </div>
+        <div class="hamburger" id="hamburger">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
       <a href="#hero">Home</a>
       <a href="#flavors">Flavors</a>
       <a href="#contact">Contact</a>
       <a href="/icescoop/login" id="login-btn">Login</a>
-      <div class="hamburger" id="hamburger">
-        <i class="fas fa-bars"></i>
-      </div>
     </nav>
     
     <!-- Mobile menu (hidden by default) -->
@@ -402,23 +444,22 @@
         });
       });
       
-      // Adjust navigation based on screen size
-      function adjustNavigation() {
-        const searchBox = document.querySelector('.search-box');
-        const nav = document.querySelector('.main-nav');
-        
-        if (window.innerWidth < 600) {
-          // Mobile view - move search box below logo
-          nav.insertBefore(searchBox, nav.children[0]);
-        } else {
-          // Desktop/tablet view - move search box to beginning of nav
-          nav.insertBefore(searchBox, nav.children[0]);
+      // Search functionality
+      const searchBtn = document.getElementById('search-btn');
+      searchBtn.addEventListener('click', function() {
+        const searchTerm = document.getElementById('sb').value;
+        if(searchTerm.trim() !== '') {
+          alert('Searching for: ' + searchTerm);
+          // Implement actual search functionality here
         }
-      }
+      });
       
-      // Run on load and resize
-      adjustNavigation();
-      window.addEventListener('resize', adjustNavigation);
+      // Allow search on Enter key
+      document.getElementById('sb').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') {
+          searchBtn.click();
+        }
+      });
     });
   </script>
 </body>
